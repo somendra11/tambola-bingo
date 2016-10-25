@@ -1,0 +1,38 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+}
+
+.ticket-table { 
+	height:60px; 
+	vertical-align: middle; 
+	font-size:20px; 
+	text-align:center; 
+} 
+
+.checked-number { 
+	background:#c6e7b8; 
+} 
+
+.checked-number:hover { 
+	background-color:#b5d6a7; 
+} 
+
+.unchecked-number { 
+	background:#d8ecf5; 
+} 
+
+.unchecked-number:hover { 
+	background:#c7dbe4; 
+	cursor:pointer; 
+} 
+
+.missing-number { 
+	background:#f4f4f4; 
+} 
+
+.missing-number:hover { 
+	background:#d3d3d3;
+}

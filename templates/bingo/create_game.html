@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Create Game{% endblock %}
+
+{% block head %}
+
+<script>
+    $( document ).ready(function() {
+        $('#datetimepicker2').datetimepicker();
+
+
+
+        $('body').on('focusout', $('.finish-time-cal'), function() {
+            var start_time = $('.start_time').val().trim();
+            var anouncement_time =  $('#id_announcement_duration').val().trim();
+            if (start_time && anouncement_time && $.isNumeric(anouncement_time)){
+                var timeObject = new Date(start_time);
+                anouncement_time = parseInt(anouncement_time) * 99 * 1000;
+                timeObject = new Date(timeObject.getTime() + anouncement_time);
+
+                if ((timeObject.getMonth()+1).toString().length == 1) {
+                    month = "0" + (timeObject.getMonth()+1);
+                } else {
+                    month = timeObject.getMonth()+1;
+                }
+                if (timeObject.getDate().toString().length == 1) {
+                    ddate = "0" + timeObject.getDate();
+                } else {
+                    ddate = timeObject.getDate();
+                }
+                if ((timeObject.getHours()) > 12) {
+                    hours = timeObject.getHours() - 12;
+                    meridiem = "PM"
+                } else if ((timeObject.getHours()) == 0) {
+                    hours = 12;
+                    meridiem = "AM"
+                } else if ((timeObject.getHours()) == 12) {
+                    hours = 12;
+                    meridiem = "PM"
+                } else {
+                    hours = timeObject.getHours();
+                    meridiem = "AM"
+                }
+
+                var dt = month + "/" + ddate + "/" + timeObject.getFullYear() + " " + hours +":" + timeObject.getMinutes() + ":" + timeObject.getSeconds() + " " + meridiem;
+                $('#id_finishing_time').val(dt);
+
+            }
+            else if (anouncement_time && !$.isNumeric(anouncement_time)) {
+                alert ("Anouncement time should be numeric");
+            }
+                
+        });
+
+
+    });
+
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-4 col-xs-6">
+        <form action="" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="datetimepicker2">Time to Start the Game</label>
+            <input type="text" class="form-control finish-time-cal start_time" name="start_time" id="datetimepicker2" />
+          </div>
+          <div class="form-group">
+            <label for="id_announcement_duration">Number's Announcement Duration (in sec)</label>
+            <input type="text" class="form-control finish-time-cal" name="announcement_duration" id="id_announcement_duration" placeholder="5" />
+          </div>
+          <div class="form-group">
+            <label for="id_finishing_time">Game Finishing Time (at max)</label>
+            <input type="text" class="form-control" name="finishing_time" id="id_finishing_time" readonly />
+          </div>
+          <input type="submit" class="btn btn-default" value="Create Game" />
+        </form>
+    </div>
+
+
+</div>
+{% endblock %}

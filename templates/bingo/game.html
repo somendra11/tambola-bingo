@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Game - {{game_id}}{% endblock %}
+
+
+{% block head %}
+<script>
+$( document ).ready(function() {
+  $('.unchecked-number').on('click', function() {
+    var current_item = this
+    var number = $(current_item).html();
+    var url = '/game/clicked-number/{{game_id}}/' + number;
+    
+    $.ajax({ 
+        url: url
+    }).done(function(data) {
+      if (data == "success") {
+        $(current_item).removeClass('unchecked-number');
+        $(current_item).addClass('checked-number');
+      }
+    });
+  });
+
+
+  $('.claim_it').on('click', function() {
+    var current_item = this
+    var claim_type = this.id;
+    var url = '/game/claim/{{game_id}}/' + claim_type;
+    $.ajax({ 
+        url: url
+    }).done(function(data) {
+      if (data[claim_type].trim().length > 0) { 
+        $("."+claim_type).html(data[claim_type]);
+      }
+    });
+        
+  });
+});
+</script>
+{% endblock %}
+
+
+
+{% block body %}
+
+  {% if refresh_time %}
+    <body onload="setInterval('window.location.reload()', {{refresh_time}});">
+  {% else %}
+    <body>
+  {% endif %}
+
+{% endblock %}
+
+
+
+{% block content %}
+
+  {% if error %}
+    <div class="col-md-12">
+      <div class="alert alert-danger" role="alert">{{error}}</div>
+    </div>
+  {% else %}
+
+    <div class="col-md-12">
+      {% if message %}
+        <div class="alert alert-info" role="alert">{{message}}</div>
+      {% endif %}
+      <table class="table table-striped table-hover dt-frame">
+        <tbody>
+          <tr>
+            <th>Game ID</th>
+            <td>{{game.game_id}}</td>
+          </tr>
+          <tr>
+            <th>Start Time</th>
+            <td>{{game.start_time}}</td>
+          </tr>
+          <tr>
+            <th>End Time</th>
+            <td>{{game.end_time}}</td>
+          </tr>
+          <tr>
+            <th>Duration (in sec)</th>
+            <td>{{game.announcement_duration}}</td>
+          </tr>
+          <tr>
+            <th>Nunber of Players</th>
+            <td>{{game.no_of_players}}</td>
+          </tr>
+          <tr>
+            <th>Created By</th>
+            <td>{{game.created_by}}</td>
+          </tr>
+          <tr>
+            <th>Four corners</th>
+            <td class="four_corners">
+                {% if game.four_corners %}
+                  {{game.four_corners}}
+                {% else %}
+                  <button class="btn btn-default btn-xs claim_it" id="four_corners">Claim it</a>
+                {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Top Row</th>
+            <td class="top_row">
+                {% if game.top_row %}
+                  {{game.top_row}}
+                {% else %}
+                  <button class="btn btn-default btn-xs claim_it" id="top_row">Claim it</a>
+                {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Middle Row</th>
+            <td class="middle_row">
+                {% if game.middle_row %}
+                  {{game.middle_row}}
+                {% else %}
+                  <button class="btn btn-default btn-xs claim_it" id="middle_row">Claim it</a>
+                {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Bottom Row</th>
+            <td class="bottom_row">
+                {% if game.bottom_row %}
+                  {{game.bottom_row}}
+                {% else %}
+                  <button class="btn btn-default btn-xs claim_it" id="bottom_row">Claim it</a>
+                {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Full House</th>
+            <td class="full_house">
+                {% if game.full_house %}
+                  {{game.full_house}}
+                {% else %}
+                  <button class="btn btn-default btn-xs claim_it" id="full_house">Claim it</a>
+                {% endif %}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-12">
+      {% if not ticket %}
+        <center><a href="{% url 'create_ticket' game_id %}" class="btn btn-primary" >Generate Your Ticket</a></center><br/>
+      {% else %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">Your Ticket</div>
+          <table class="table">
+            {{ticket|safe}}
+          </table>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-8 col-sm-8">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Numbers already announced</div>
+        <div class="panel-body">{{announcement}}</div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Last Numbers announced</div>
+        <div class="panel-body">
+          <center><h1>{{last_announcement}}</h1></center>
+        </div>
+      </div>
+    </div>
+
+  {% endif %}
+{% endblock %}
