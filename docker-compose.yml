@@ -8,10 +8,11 @@ cassandra:
     - 9042:9042
     - 9160:9160
 django1:
-  image: minimal-django1.5:bingo1
+  image: somendra11/minimal-django1.5:applying-docker
   restart: always
   ports:
     - 9032:8000
+    - 9033:8001
   extra_hosts:
     - "cassy:127.0.0.1" # cassandra machine ip
   volumes:
