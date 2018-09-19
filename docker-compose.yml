@@ -13,9 +13,12 @@ django1:
   ports:
     - 9032:8000
     - 9033:8001
+    - 9080:80
+    - 9090:443
   extra_hosts:
     - "cassy:127.0.0.1" # cassandra machine ip
+    - "localhost:127.0.0.1" # apache machine ip
   volumes:
     - .:/home/app
   command: ["python", "/home/app/manage.py", "sync_cassandra"]
-  # command: ["python", "/home/app/manage.py", "runserver", "0.0.0.0:8000"]
+  command: ["httpd", "-k", "start", "-DFOREGROUND"]
