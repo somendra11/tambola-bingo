@@ -7,7 +7,7 @@ from library.bingo_scripts import ticket_genrator
 
 from cassandra.cluster import Cluster
 
-cluster = Cluster(['127.0.0.1'])
+cluster = Cluster(["cassy"])
 session_user = cluster.connect('users')
 session_bingo = cluster.connect('bingo')
 

@@ -3,7 +3,6 @@ from django.conf import settings
 
 urlpatterns = patterns('',
     url('^auth/', include('users.urls')),
-    url('^one/', include('one.urls')),
     url('^game/', include('bingo.urls')),
     url('', include('tweets.urls')),
 )

@@ -4,7 +4,7 @@ from django.core.management.base import NoArgsCommand
 class Command(NoArgsCommand):
 
     def handle_noargs(self, **options):
-        cluster = Cluster(['127.0.0.1'])
+        cluster = Cluster(["cassy"])
         session = cluster.connect()
 
         rows = session.execute(
@@ -14,7 +14,7 @@ class Command(NoArgsCommand):
             msg = ' It looks like you already have a users keyspace.\nDo you '
             msg += 'want to delete it and recreate it? All current data will '
             msg += 'be deleted! (y/n): '
-            resp = raw_input(msg)
+            resp = 'n' # raw_input(msg)
             if not resp or resp[0] != 'y':
                 print "Ok, then we're done here."
                 return
@@ -87,7 +87,7 @@ class Command(NoArgsCommand):
             msg = ' It looks like you already have a Bingo keyspace.\nDo you '
             msg += 'want to delete it and recreate it? All current data will '
             msg += 'be deleted! (y/n): '
-            resp = raw_input(msg)
+            resp = 'n' # raw_input(msg)
             if not resp or resp[0] != 'y':
                 print "Ok, then we're done here."
                 return
